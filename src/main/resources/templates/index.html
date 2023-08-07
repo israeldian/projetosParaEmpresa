@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Inspeção Usinagem</title>
+    <style>
+		
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            width: 120px;
+            text-align: center;
+            margin-right: 10px;
+        }
+
+        .form-group input[type="number"],
+        .form-group select {
+            width: 60px;
+        }
+        .form-group input[type="text"],
+        .form-group select {
+            width: 60px;
+        }
+
+        .form-group .submit-button {
+            margin-left: 60px;
+        }
+        
+        .form-group select#opcoes {
+            width: 100px;
+        }
+        
+        .form-group select#operador {
+            width: 100px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Inspeção Usinagem</h1>
+    <form method="post" action="/enviar" enctype="multipart/form-data" onsubmit="return prepareForm()">
+    <input type="hidden" id="info" name="info" value="">
+        <div class="form-group">
+            <label for="codigo">Código:</label>
+            <input type="text" id="codigo" name="codigo" required>
+            <label for="operador">Operador:</label>
+			<select id="operador" name="operador" required>
+				<option th:each="opcao : ${operador}" th:value="${opcao}" th:text="${opcao}"></option>;
+            </select>
+			<label for="op">Número da OP:</label>
+            <input type="text" id="op" name="op" required>
+            <label for="opcoes">Máquina:</label>
+            <select id="opcoes" name="opcoes" required>
+                <option th:each="opcao : ${opcoes}" th:value="${opcao}" th:text="${opcao}"></option>
+            </select>
+            <label for="codigo">Lado</label>
+            <select id="lado" name="lado" required>
+                <option th:each="opcao : ${lados}" th:value="${opcao}" th:text="${opcao}"></option>
+            </select>
+        </div>
+        <div id="error-message" style="color: red; display: none;">Por favor, preencha os campos obrigatórios. (Código, Op, Operador e Máquina)</div>        
+        
+        <div class="form-group">
+            <label for="caracteristica1">10,5±0,15:</label>
+            <label for="descricao1">Diâmetro interno</label>
+            <input class="info-input" type="number" step="0.001" id="info[0][0]" name="info[0][0]" onkeypress="moveToNextField(event, 0, 0)">
+            <input class="info-input" type="number" step="0.001" id="info[0][1]" name="info[0][1]" onkeypress="moveToNextField(event, 0, 1)">
+            <input class="info-input" type="number" step="0.001" id="info[0][2]" name="info[0][2]" onkeypress="moveToNextField(event, 0, 2)">
+            <input class="info-input" type="number" step="0.001" id="info[0][3]" name="info[0][3]" onkeypress="moveToNextField(event, 0, 3)">
+            <input class="info-input" type="number" step="0.001" id="info[0][4]" name="info[0][4]" onkeypress="moveToNextField(event, 0, 4)">
+            <input class="info-input" type="number" step="0.001" id="info[0][5]" name="info[0][5]" onkeypress="moveToNextField(event, 0, 5)">
+            <input class="info-input" type="number" step="0.001" id="info[0][6]" name="info[0][6]" onkeypress="moveToNextField(event, 0, 6)">
+            <input class="info-input" type="number" step="0.001" id="info[0][7]" name="info[0][7]" onkeypress="moveToNextField(event, 0, 7)">
+            <input class="info-input" type="number" step="0.001" id="info[0][8]" name="info[0][8]" onkeypress="moveToNextField(event, 0, 8)">
+            <input class="info-input" type="number" step="0.001" id="info[0][9]" name="info[0][9]" onkeypress="moveToNextField(event, 0, 9)">
+            <input class="info-input" type="number" step="0.001" id="info[0][10]" name="info[0][10]" onkeypress="moveToNextField(event, 0, 10)">
+            <input class="info-input" type="number" step="0.001" id="info[0][11]" name="info[0][11]" onkeypress="moveToNextField(event, 0, 11)">
+            <input class="info-input" type="number" step="0.001" id="info[0][12]" name="info[0][12]" onkeypress="moveToNextField(event, 0, 12)">
+            <input class="info-input" type="number" step="0.001" id="info[0][13]" name="info[0][13]" onkeypress="moveToNextField(event, 0, 13)">
+            <input class="info-input" type="number" step="0.001" id="info[0][14]" name="info[0][14]" onkeypress="moveToNextField(event, 0, 14)">
+        </div>
+        <div class="form-group">
+            <label for="caracteristica2">15,2±0,2:</label>
+            <label for="descricao2">Diâmetro interno</label>
+            <input class="info-input" type="number" step="0.001" id="info[1][0]" name="info[1][0]" onkeypress="moveToNextField(event, 1, 0)">
+            <input class="info-input" type="number" step="0.001" id="info[1][1]" name="info[1][1]" onkeypress="moveToNextField(event, 1, 1)">
+            <input class="info-input" type="number" step="0.001" id="info[1][2]" name="info[1][2]" onkeypress="moveToNextField(event, 1, 2)">
+            <input class="info-input" type="number" step="0.001" id="info[1][3]" name="info[1][3]" onkeypress="moveToNextField(event, 1, 3)">
+            <input class="info-input" type="number" step="0.001" id="info[1][4]" name="info[1][4]" onkeypress="moveToNextField(event, 1, 4)">
+            <input class="info-input" type="number" step="0.001" id="info[1][5]" name="info[1][5]" onkeypress="moveToNextField(event, 1, 5)">
+            <input class="info-input" type="number" step="0.001" id="info[1][6]" name="info[1][6]" onkeypress="moveToNextField(event, 1, 6)">
+            <input class="info-input" type="number" step="0.001" id="info[1][7]" name="info[1][7]" onkeypress="moveToNextField(event, 1, 7)">
+            <input class="info-input" type="number" step="0.001" id="info[1][8]" name="info[1][8]" onkeypress="moveToNextField(event, 1, 8)">
+            <input class="info-input" type="number" step="0.001" id="info[1][9]" name="info[1][9]" onkeypress="moveToNextField(event, 1, 9)">
+            <input class="info-input" type="number" step="0.001" id="info[1][10]" name="info[1][10]" onkeypress="moveToNextField(event, 1, 10)">
+            <input class="info-input" type="number" step="0.001" id="info[1][11]" name="info[1][11]" onkeypress="moveToNextField(event, 1, 11)">
+            <input class="info-input" type="number" step="0.001" id="info[1][12]" name="info[1][12]" onkeypress="moveToNextField(event, 1, 12)">
+            <input class="info-input" type="number" step="0.001" id="info[1][13]" name="info[1][13]" onkeypress="moveToNextField(event, 1, 13)">
+            <input class="info-input" type="number" step="0.001" id="info[1][14]" name="info[1][14]" onkeypress="moveToNextField(event, 1, 14)">
+        </div>
+
+        <div class="form-group">
+            <label for="caracteristica3">10,3±0,5:</label>
+            <label for="descricao3">Diâmetro interno</label>
+			<input class="info-input" type="number" step="0.001" id="info[2][0]" name="info[2][0]" onkeypress="moveToNextField(event, 2, 0)">
+			<input class="info-input" type="number" step="0.001" id="info[2][1]" name="info[2][1]" onkeypress="moveToNextField(event, 2, 1)">
+			<input class="info-input" type="number" step="0.001" id="info[2][2]" name="info[2][2]" onkeypress="moveToNextField(event, 2, 2)">
+			<input class="info-input" type="number" step="0.001" id="info[2][3]" name="info[2][3]" onkeypress="moveToNextField(event, 2, 3)">
+			<input class="info-input" type="number" step="0.001" id="info[2][4]" name="info[2][4]" onkeypress="moveToNextField(event, 2, 4)">
+			<input class="info-input" type="number" step="0.001" id="info[2][5]" name="info[2][5]" onkeypress="moveToNextField(event, 2, 5)">
+			<input class="info-input" type="number" step="0.001" id="info[2][6]" name="info[2][6]" onkeypress="moveToNextField(event, 2, 6)">
+			<input class="info-input" type="number" step="0.001" id="info[2][7]" name="info[2][7]" onkeypress="moveToNextField(event, 2, 7)">
+			<input class="info-input" type="number" step="0.001" id="info[2][8]" name="info[2][8]" onkeypress="moveToNextField(event, 2, 8)">
+			<input class="info-input" type="number" step="0.001" id="info[2][9]" name="info[2][9]" onkeypress="moveToNextField(event, 2, 9)">
+			<input class="info-input" type="number" step="0.001" id="info[2][10]" name="info[2][10]" onkeypress="moveToNextField(event, 2, 10)">
+			<input class="info-input" type="number" step="0.001" id="info[2][11]" name="info[2][11]" onkeypress="moveToNextField(event, 2, 11)">
+			<input class="info-input" type="number" step="0.001" id="info[2][12]" name="info[2][12]" onkeypress="moveToNextField(event, 2, 12)">
+			<input class="info-input" type="number" step="0.001" id="info[2][13]" name="info[2][13]" onkeypress="moveToNextField(event, 2, 13)">
+			<input class="info-input" type="number" step="0.001" id="info[2][14]" name="info[2][14]" onkeypress="moveToNextField(event, 2, 14)">
+        </div>
+			
+		<div class="form-group">
+    		<label for="caracteristica4">20,7±0,5:</label>
+    		<label for="descricao4">Diâmetro interno</label>
+    		<input class="info-input" type="number" step="0.001" id="info[3][0]" name="info[3][0]" onkeypress="moveToNextField(event, 3, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][1]" name="info[3][1]"onkeypress="moveToNextField(event, 3, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][2]" name="info[3][2]"onkeypress="moveToNextField(event, 3, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][3]" name="info[3][3]"onkeypress="moveToNextField(event, 3, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][4]" name="info[3][4]"onkeypress="moveToNextField(event, 3, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][5]" name="info[3][5]"onkeypress="moveToNextField(event, 3, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][6]" name="info[3][6]"onkeypress="moveToNextField(event, 3, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][7]" name="info[3][7]"onkeypress="moveToNextField(event, 3, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][8]" name="info[3][8]"onkeypress="moveToNextField(event, 3, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][9]" name="info[3][9]"onkeypress="moveToNextField(event, 3, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][10]" name="info[3][10]"onkeypress="moveToNextField(event, 3, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][11]" name="info[3][11]"onkeypress="moveToNextField(event, 3, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][12]" name="info[3][12]"onkeypress="moveToNextField(event, 3, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][13]" name="info[3][13]"onkeypress="moveToNextField(event, 3, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[3][14]" name="info[3][14]"onkeypress="moveToNextField(event, 3, 14)">
+		</div>
+		<div class="form-group">
+    		<label for="caracteristica5">66,5±0,5:</label>
+    		<label for="descricao5">Distância</label>
+    		<input class="info-input" type="number" step="0.001" id="info[4][0]" name="info[4][0]" onkeypress="moveToNextField(event, 4, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][1]" name="info[4][1]" onkeypress="moveToNextField(event, 4, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][2]" name="info[4][2]" onkeypress="moveToNextField(event, 4, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][3]" name="info[4][3]" onkeypress="moveToNextField(event, 4, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][4]" name="info[4][4]" onkeypress="moveToNextField(event, 4, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][5]" name="info[4][5]" onkeypress="moveToNextField(event, 4, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][6]" name="info[4][6]" onkeypress="moveToNextField(event, 4, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][7]" name="info[4][7]" onkeypress="moveToNextField(event, 4, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][8]" name="info[4][8]" onkeypress="moveToNextField(event, 4, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][9]" name="info[4][9]" onkeypress="moveToNextField(event, 4, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][10]" name="info[4][10]" onkeypress="moveToNextField(event, 4, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][11]" name="info[4][11]" onkeypress="moveToNextField(event, 4, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][12]" name="info[4][12]" onkeypress="moveToNextField(event, 4, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][13]" name="info[4][13]" onkeypress="moveToNextField(event, 4, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[4][14]" name="info[4][14]" onkeypress="moveToNextField(event, 4, 14)">
+		</div>
+		
+		<div class="form-group">
+    		<label for="caracteristica6">9,1±0,2:</label>
+    		<label for="descricao6">Diâmetro interno</label>
+    		<input class="info-input" type="number" step="0.001" id="info[5][0]" name="info[5][0]" onkeypress="moveToNextField(event, 5, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][1]" name="info[5][1]" onkeypress="moveToNextField(event, 5, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][2]" name="info[5][2]" onkeypress="moveToNextField(event, 5, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][3]" name="info[5][3]" onkeypress="moveToNextField(event, 5, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][4]" name="info[5][4]" onkeypress="moveToNextField(event, 5, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][5]" name="info[5][5]" onkeypress="moveToNextField(event, 5, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][6]" name="info[5][6]" onkeypress="moveToNextField(event, 5, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][7]" name="info[5][7]" onkeypress="moveToNextField(event, 5, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][8]" name="info[5][8]" onkeypress="moveToNextField(event, 5, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][9]" name="info[5][9]" onkeypress="moveToNextField(event, 5, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][10]" name="info[5][10]" onkeypress="moveToNextField(event, 5, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][11]" name="info[5][11]" onkeypress="moveToNextField(event, 5, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][12]" name="info[5][12]" onkeypress="moveToNextField(event, 5, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][13]" name="info[5][13]" onkeypress="moveToNextField(event, 5, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[5][14]" name="info[5][14]" onkeypress="moveToNextField(event, 5, 14)">
+		</div>
+
+		<div class="form-group">
+    		<label for="caracteristica7">150±5:</label>
+    		<label for="descricao7">Distância</label>
+    		<input class="info-input" type="number" step="0.001" id="info[6][0]" name="info[6][0]" onkeypress="moveToNextField(event, 6, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][1]" name="info[6][1]" onkeypress="moveToNextField(event, 6, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][2]" name="info[6][2]" onkeypress="moveToNextField(event, 6, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][3]" name="info[6][3]" onkeypress="moveToNextField(event, 6, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][4]" name="info[6][4]" onkeypress="moveToNextField(event, 6, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][5]" name="info[6][5]" onkeypress="moveToNextField(event, 6, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][6]" name="info[6][6]" onkeypress="moveToNextField(event, 6, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][7]" name="info[6][7]" onkeypress="moveToNextField(event, 6, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][8]" name="info[6][8]" onkeypress="moveToNextField(event, 6, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][9]" name="info[6][9]" onkeypress="moveToNextField(event, 6, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][10]" name="info[6][10]" onkeypress="moveToNextField(event, 6, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][11]" name="info[6][11]" onkeypress="moveToNextField(event, 6, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][12]" name="info[6][12]" onkeypress="moveToNextField(event, 6, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][13]" name="info[6][13]" onkeypress="moveToNextField(event, 6, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[6][14]" name="info[6][14]" onkeypress="moveToNextField(event, 6, 14)">
+		</div>
+		
+		<div class="form-group">
+    		<label for="caracteristica8">150±2:</label>
+    		<label for="descricao8">Distância</label>
+    		<input class="info-input" type="number" step="0.001" id="info[7][0]" name="info[7][0]" onkeypress="moveToNextField(event, 7, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][1]" name="info[7][1]" onkeypress="moveToNextField(event, 7, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][2]" name="info[7][2]" onkeypress="moveToNextField(event, 7, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][3]" name="info[7][3]" onkeypress="moveToNextField(event, 7, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][4]" name="info[7][4]" onkeypress="moveToNextField(event, 7, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][5]" name="info[7][5]" onkeypress="moveToNextField(event, 7, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][6]" name="info[7][6]" onkeypress="moveToNextField(event, 7, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][7]" name="info[7][7]" onkeypress="moveToNextField(event, 7, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][8]" name="info[7][8]" onkeypress="moveToNextField(event, 7, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][9]" name="info[7][9]" onkeypress="moveToNextField(event, 7, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][10]" name="info[7][10]" onkeypress="moveToNextField(event, 7, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][11]" name="info[7][11]" onkeypress="moveToNextField(event, 7, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][12]" name="info[7][12]" onkeypress="moveToNextField(event, 7, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][13]" name="info[7][13]" onkeypress="moveToNextField(event, 7, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[7][14]" name="info[7][14]" onkeypress="moveToNextField(event, 7, 14)">
+		</div>
+
+		<div class="form-group">
+    		<label for="caracteristica9">95,5±2:</label>
+    		<label for="descricao9">Diâmetro interno</label>
+    		<input class="info-input" type="number" step="0.001" id="info[8][0]" name="info[8][0]" onkeypress="moveToNextField(event, 8, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][1]" name="info[8][1]" onkeypress="moveToNextField(event, 8, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][2]" name="info[8][2]" onkeypress="moveToNextField(event, 8, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][3]" name="info[8][3]" onkeypress="moveToNextField(event, 8, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][4]" name="info[8][4]" onkeypress="moveToNextField(event, 8, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][5]" name="info[8][5]" onkeypress="moveToNextField(event, 8, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][6]" name="info[8][6]" onkeypress="moveToNextField(event, 8, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][7]" name="info[8][7]" onkeypress="moveToNextField(event, 8, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][8]" name="info[8][8]" onkeypress="moveToNextField(event, 8, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][9]" name="info[8][9]" onkeypress="moveToNextField(event, 8, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][10]" name="info[8][10]" onkeypress="moveToNextField(event, 8, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][11]" name="info[8][11]" onkeypress="moveToNextField(event, 8, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][12]" name="info[8][12]" onkeypress="moveToNextField(event, 8, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][13]" name="info[8][13]" onkeypress="moveToNextField(event, 8, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[8][14]" name="info[8][14]" onkeypress="moveToNextField(event, 8, 14)">
+		</div>
+		
+		<div class="form-group">
+    		<label for="caracteristica10">33,7±0,5:</label>
+    		<label for="descricao10">Diâmetro interno</label>
+    		<input class="info-input" type="number" step="0.001" id="info[9][0]" name="info[9][0]" onkeypress="moveToNextField(event, 9, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][1]" name="info[9][1]" onkeypress="moveToNextField(event, 9, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][2]" name="info[9][2]" onkeypress="moveToNextField(event, 9, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][3]" name="info[9][3]" onkeypress="moveToNextField(event, 9, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][4]" name="info[9][4]" onkeypress="moveToNextField(event, 9, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][5]" name="info[9][5]" onkeypress="moveToNextField(event, 9, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][6]" name="info[9][6]" onkeypress="moveToNextField(event, 9, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][7]" name="info[9][7]" onkeypress="moveToNextField(event, 9, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][8]" name="info[9][8]" onkeypress="moveToNextField(event, 9, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][9]" name="info[9][9]" onkeypress="moveToNextField(event, 9, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][10]" name="info[9][10]" onkeypress="moveToNextField(event, 9, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][11]" name="info[9][11]" onkeypress="moveToNextField(event, 9, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][12]" name="info[9][12]" onkeypress="moveToNextField(event, 9, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][13]" name="info[9][13]" onkeypress="moveToNextField(event, 9, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[9][14]" name="info[9][14]" onkeypress="moveToNextField(event, 9, 14)">
+		</div>
+		
+		<div class="form-group">
+    		<label for="caracteristica11">30,9±0,3:</label>
+    		<label for="descricao11">Diâmetro interno</label>
+    		<input class="info-input" type="number" step="0.001" id="info[10][0]" name="info[10][0]" onkeypress="moveToNextField(event, 10, 0)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][1]" name="info[10][1]" onkeypress="moveToNextField(event, 10, 1)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][2]" name="info[10][2]" onkeypress="moveToNextField(event, 10, 2)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][3]" name="info[10][3]" onkeypress="moveToNextField(event, 10, 3)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][4]" name="info[10][4]" onkeypress="moveToNextField(event, 10, 4)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][5]" name="info[10][5]" onkeypress="moveToNextField(event, 10, 5)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][6]" name="info[10][6]" onkeypress="moveToNextField(event, 10, 6)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][7]" name="info[10][7]" onkeypress="moveToNextField(event, 10, 7)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][8]" name="info[10][8]" onkeypress="moveToNextField(event, 10, 8)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][9]" name="info[10][9]" onkeypress="moveToNextField(event, 10, 9)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][10]" name="info[10][10]" onkeypress="moveToNextField(event, 10, 10)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][11]" name="info[10][11]" onkeypress="moveToNextField(event, 10, 11)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][12]" name="info[10][12]" onkeypress="moveToNextField(event, 10, 12)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][13]" name="info[10][13]" onkeypress="moveToNextField(event, 10, 13)">
+    		<input class="info-input" type="number" step="0.001" id="info[10][14]" name="info[10][14]" onkeypress="moveToNextField(event, 10, 14)">
+		</div>
+		
+		<div class="form-group">
+    		<label for="caracteristica12">51,1±0,3:</label>
+    		<label for="descricao12">Diâmetro interno</label>
+    		<input class="info-input" type="number" step="0.001" id="info[11][0]" name="info[11][0]" onkeypress="moveToNextField(event, 11, 0, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][1]" name="info[11][1]"onkeypress="moveToNextField(event, 11, 1, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][2]" name="info[11][2]"onkeypress="moveToNextField(event, 11, 2, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][3]" name="info[11][3]"onkeypress="moveToNextField(event, 11, 3, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][4]" name="info[11][4]"onkeypress="moveToNextField(event, 11, 4, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][5]" name="info[11][5]"onkeypress="moveToNextField(event, 11, 5, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][6]" name="info[11][6]"onkeypress="moveToNextField(event, 11, 6, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][7]" name="info[11][7]"onkeypress="moveToNextField(event, 11, 7, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][8]" name="info[11][8]"onkeypress="moveToNextField(event, 11, 8, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][9]" name="info[11][9]"onkeypress="moveToNextField(event, 11, 9, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][10]" name="info[11][10]"onkeypress="moveToNextField(event, 11, 10, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][11]" name="info[11][11]"onkeypress="moveToNextField(event, 11, 11, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][12]" name="info[11][12]"onkeypress="moveToNextField(event, 11, 12, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][13]" name="info[11][13]"onkeypress="moveToNextField(event, 11, 13, true)">
+    		<input class="info-input" type="number" step="0.001" id="info[11][14]" name="info[11][14]"onkeypress="moveToNextField(event, 11, 14, true)">
+		</div>
+    <script>
+        function validateForm() {
+            var opcoesValue = document.querySelector('select[name="opcoes"]').value;
+            var codigoValue = document.querySelector('input[name="codigo"]').value;
+            var operadorValue = document.querySelector('select[name="operador"]').value;
+            var opValue = document.querySelector('input[name="op"]').value;
+
+            if (!opcoesValue || !codigoValue || !operadorValue || !opValue) {
+                document.getElementById("error-message").style.display = "block";
+                return false;
+            }
+            return true;
+        }
+
+        function prepareForm() {
+            const form = document.querySelector('form');
+            const infoMatrix = [];
+            const rows = 12;
+            const cols = 15;
+
+            for (let i = 0; i < rows; i++) {
+                infoMatrix.push(new Array(cols).fill(0));
+            }
+
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    const input = form.elements[`info[${i}][${j}]`];
+                    if (input) {
+                        const value = parseFloat(input.value);
+                        if (!isNaN(value)) {
+                            infoMatrix[i][j] = value;
+                        }
+                    }
+                }
+            }
+
+            const infoInput = document.getElementById('info');
+            infoInput.value = JSON.stringify(infoMatrix);
+            return true;
+        }
+
+        function moveToNextField(event, row, col, moveToNextColumn = false) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                var numRows = 12;
+                var numCols = 15;
+                if (moveToNextColumn && col < numCols - 1) {
+                    document.querySelector(`input[name="info[0][${col + 1}]"]`).focus();
+                } else if (row < numRows - 1) {
+                    document.querySelector(`input[name="info[${row + 1}][${col}]"]`).focus();
+                } else {
+                    document.querySelector(`input[name="info[${row}][${col}]"]`).focus();
+                }
+            }
+        }
+
+        function handleEnterKeyPress(event) {
+            if (event.key === 'Enter') {
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
+    <input type="submit" class="submit-button" value="Enviar">
+    </form>
+</body>
+</html>
